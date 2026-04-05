@@ -18,7 +18,7 @@ def ask_ai(text):
     }
 
     data = {
-        "model": "mistralai/mistral-7b-instruct:free",
+        "model": "openchat/openchat-3.5-0106:free",
         "messages": [
             {"role": "user", "content": text}
         ]
