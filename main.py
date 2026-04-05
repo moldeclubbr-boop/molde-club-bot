@@ -10,28 +10,21 @@ OPENROUTER_KEY = os.environ["OPENROUTER_KEY"]
 bot = telebot.TeleBot(TOKEN)
 
 def ask_ai(text):
-    url = "https://openrouter.ai/api/v1/chat/completions"
+    API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-large"
+    headers = {"Authorization": f"Bearer {os.environ['HF_TOKEN']}"}
 
-    headers = {
-        "Authorization": f"Bearer {OPENROUTER_KEY}",
-        "Content-Type": "application/json"
-    }
+    payload = {
+        "inputs": text
+    }
 
-    data = {
-        "model": "openchat/openchat-3.5-0106:free",
-        "messages": [
-            {"role": "user", "content": text}
-        ]
-    }
+    response = requests.post(API_URL, headers=headers, json=payload)
 
-    response = requests.post(url, headers=headers, json=data)
+    result = response.json()
 
-    result = response.json()
+    if isinstance(result, list):
+        return result[0]["generated_text"]
 
-    if "choices" not in result:
-        return f"Ошибка AI: {result}"
-
-    return result["choices"][0]["message"]["content"]
+    return f"Ошибка AI: {result}"
 
 @bot.message_handler(func=lambda message: True)
 def handle(message):
