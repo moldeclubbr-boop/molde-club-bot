@@ -11,25 +11,28 @@ bot = telebot.TeleBot(TOKEN)
 
 
 def ask_ai(text):
-    url = "https://openrouter.ai/api/v1/chat/completions"
+    url = "https://openrouter.ai/api/v1/chat/completions"
 
-    headers = {
-        "Authorization": f"Bearer {OPENROUTER_KEY}",
-        "Content-Type": "application/json"
-    }
+    headers = {
+        "Authorization": f"Bearer {OPENROUTER_KEY}",
+        "Content-Type": "application/json"
+    }
 
-    data = {
-        "model": "mistralai/mistral-7b-instruct:free",
-        "messages": [
-            {"role": "user", "content": text}
-        ]
-    }
+    data = {
+        "model": "mistralai/mistral-7b-instruct:free",
+        "messages": [
+            {"role": "user", "content": text}
+        ]
+    }
 
-    response = requests.post(url, headers=headers, json=data)
-    result = response.json()
+    response = requests.post(url, headers=headers, json=data)
 
-    return result["choices"][0]["message"]["content"]
+    result = response.json()
 
+    if "choices" not in result:
+        return f"Ошибка AI: {result}"
+
+    return result["choices"][0]["message"]["content"]
 
 @bot.message_handler(func=lambda message: True)
 def handle(message):
