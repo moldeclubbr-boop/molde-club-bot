@@ -34,10 +34,9 @@ def ask_ai(text):
 @bot.message_handler(func=lambda message: True)
 def handle(message):
     try:
-        answer = ask_ai(message.text)
-    except Exception as e:
-        print(e)
-        answer = "Ошибка AI 😅"
+    answer = ask_ai(message.text)
+except Exception as e:
+    answer = str(e)
 
     bot.reply_to(message, answer)
 
