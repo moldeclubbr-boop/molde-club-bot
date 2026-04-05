@@ -11,7 +11,7 @@ bot = telebot.TeleBot(TOKEN)
 
 def ask_ai(text):
     try:
-        url = "https://router.huggingface.co/google/flan-t5-base"
+        url = "https://router.huggingface.co/huggingface/google/flan-t5-base"
 
         headers = {
             "Authorization": f"Bearer {os.environ.get('HF_TOKEN', '')}"
