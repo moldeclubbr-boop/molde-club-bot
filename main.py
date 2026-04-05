@@ -36,11 +36,14 @@ def ask_ai(text):
 @bot.message_handler(func=lambda message: True)
 def handle(message):
     try:
-    answer = ask_ai(message.text)
-except Exception as e:
-    answer = str(e)
+        answer = ask_ai(message.text)
+    except Exception as e:
+        answer = f"Ошибка: {str(e)}"
 
-    bot.reply_to(message, answer)
+    try:
+        bot.reply_to(message, answer)
+    except Exception as e:
+        print(f"Ошибка отправки: {e}")
 
 # Start bot
 bot.infinity_polling(none_stop=True, skip_pending=True)
