@@ -43,4 +43,4 @@ def handle(message):
 
 
 # Start bot
-bot.infinity_polling()
+bot.infinity_polling(none_stop=True, skip_pending=True)
