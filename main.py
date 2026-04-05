@@ -10,23 +10,24 @@ OPENROUTER_KEY = os.environ["OPENROUTER_KEY"]
 bot = telebot.TeleBot(TOKEN)
 
 def ask_ai(text):
-    try:API_URL = "https://router.huggingface.co/google/flan-t5-large"
-        headers = {"Authorization": f"Bearer {os.environ.get('HF_TOKEN', '')}"}
+    try:
+        url = "https://router.huggingface.co/google/flan-t5-base"
 
-        payload = {
+        headers = {
+            "Authorization": f"Bearer {os.environ.get('HF_TOKEN', '')}"
+        }
+
+        data = {
             "inputs": text
         }
 
-        response = requests.post(API_URL, headers=headers, json=payload)
+        response = requests.post(url, headers=headers, json=data)
         result = response.json()
 
-        if isinstance(result, list):
-            return result[0].get("generated_text", "Нет ответа")
-
-        return f"Ошибка AI: {result}"
+        return result[0]["generated_text"]
 
     except Exception as e:
-        return f"Crash AI: {str(e)}"
+        return f"Ошибка AI: {str(e)}"
 
 @bot.message_handler(func=lambda message: True)
 def handle(message):
