@@ -22,9 +22,16 @@ def ask_ai(text):
         }
 
         response = requests.post(url, headers=headers, json=data)
+
+        if response.status_code != 200:
+            return f"Ошибка API: {response.text}"
+
         result = response.json()
 
-        return result[0]["generated_text"]
+        if isinstance(result, list):
+            return result[0].get("generated_text", "Нет ответа")
+
+        return str(result)
 
     except Exception as e:
         return f"Ошибка AI: {str(e)}"
