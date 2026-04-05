@@ -11,30 +11,31 @@ bot = telebot.TeleBot(TOKEN)
 
 def ask_ai(text):
     try:
-        url = "https://router.huggingface.co/huggingface/google/flan-t5-base"
+        url = "https://openrouter.ai/api/v1/chat/completions"
 
         headers = {
-            "Authorization": f"Bearer {os.environ.get('HF_TOKEN', '')}"
+            "Authorization": f"Bearer {os.environ.get('OPENROUTER_KEY', '')}",
+            "Content-Type": "application/json"
         }
 
         data = {
-            "inputs": text
+            "model": "openai/gpt-3.5-turbo",
+            "messages": [
+                {"role": "user", "content": text}
+            ]
         }
 
         response = requests.post(url, headers=headers, json=data)
 
-        if response.status_code != 200:
-            return f"Ошибка API: {response.text}"
+        if response.status_code == 200:
+            result = response.json()
+            return result["choices"][0]["message"]["content"]
 
-        result = response.json()
+        # если AI не сработал
+        return "AI сейчас недоступен 😅 попробуй позже"
 
-        if isinstance(result, list):
-            return result[0].get("generated_text", "Нет ответа")
-
-        return str(result)
-
-    except Exception as e:
-        return f"Ошибка AI: {str(e)}"
+    except:
+        return "AI временно не работает 😴"
 
 @bot.message_handler(func=lambda message: True)
 def handle(message):
