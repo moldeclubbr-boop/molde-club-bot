@@ -10,8 +10,7 @@ OPENROUTER_KEY = os.environ["OPENROUTER_KEY"]
 bot = telebot.TeleBot(TOKEN)
 
 def ask_ai(text):
-    try:
-        API_URL = "https://api-inference.huggingface.co/models/google/flan-t5-large"
+    try:API_URL = "https://router.huggingface.co/google/flan-t5-large"
         headers = {"Authorization": f"Bearer {os.environ.get('HF_TOKEN', '')}"}
 
         payload = {
